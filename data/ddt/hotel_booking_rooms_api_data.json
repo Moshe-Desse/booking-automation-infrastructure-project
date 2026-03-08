@@ -1,0 +1,46 @@
+[
+  {
+        "test_name": "valid_room_suite",
+        "roomName": "104",
+        "type": "Suite",
+        "accessible": true,
+        "image": "https://link-to-image.com/room104.png",
+        "description": "חדר מפנק עם נוף לים",
+        "roomPrice": 500,
+        "features": ["WiFi", "Mini Bar"],
+        "expected_status": 200
+    },
+    {
+        "test_name": "missing_room_name",
+        "roomName": "",
+        "type": "Single",
+        "accessible": false,
+        "image": "https://link-to-image.com/room105.png",
+        "description": "חדר ללא שם",
+        "roomPrice": 250,
+        "features": ["WiFi"],
+        "expected_status": 400
+    },
+    {
+        "test_name": "invalid_room_type",
+        "roomName": "106",
+        "type": "Penthouse",
+        "accessible": true,
+        "image": "https://link-to-image.com/room106.png",
+        "description": "סוג חדר לא קיים במערכת",
+        "roomPrice": 500,
+        "features": ["WiFi"],
+        "expected_status": 400
+    },
+    {
+        "test_name": "invalid_price_negative",
+        "roomName": "107",
+        "type": "Family",
+        "accessible": false,
+        "image": "https://link-to-image.com/room107.png",
+        "description": "מחיר לא תקין",
+        "roomPrice": -1,
+        "features": ["WiFi"],
+        "expected_status": 400
+    }
+]
