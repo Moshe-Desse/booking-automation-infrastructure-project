@@ -38,6 +38,7 @@ class UIActions:
         return text.strip()
 
     @staticmethod
+    @allure.step("Select option: {value} - {label}")
     def select_option(element: Locator, value: str = None, label: str = None, timeout: int = DEFAULT_TIMEOUT) -> None:
         element.wait_for(state="visible", timeout=timeout)
         if value:
@@ -54,24 +55,24 @@ class UIActions:
 
 
     @staticmethod
-    def click_all_delete_button(element: Locator, timeout: int = DEFAULT_TIMEOUT) -> None:
+    @allure.step("Click all options in element:")
+    def click_all(element: Locator, timeout: int = DEFAULT_TIMEOUT) -> None:
         element.first.wait_for(state="visible", timeout=timeout)
         count = element.count()
         for i in range(count):
-            element.nth(0).click(timeout=timeout, force=True)
+            element.nth(i).click(timeout=timeout, force=True)
             element.page.wait_for_timeout(500)
-
-
+                        
     # @staticmethod
-    # def click_all(element: Locator, timeout: int = DEFAULT_TIMEOUT) -> None:
-    #     element.first.wait_for(state="visible", timeout=timeout)
-    #     while element.count() > 0:            
-    #         element.first.click(timeout=timeout, force=True)
+    # @allure.step("Click all delete rooms button element:")
+    # def click_all_remove_button(element: Locator, timeout: int = DEFAULT_TIMEOUT) -> None:
+    #     element.first.wait_for(state="attached", timeout=timeout)
+    #     while element.count() > 0:
+    #         element.first.click()
     #         element.page.wait_for_timeout(500)
-            
-    
 
     @staticmethod
+    @allure.step("Click to reset page to main page")
     def click_to_reset_page(login_back_button: Locator, main_page_button: Locator, timeout: int = DEFAULT_TIMEOUT):
         try:
             if login_back_button.is_visible(timeout=timeout):
@@ -83,7 +84,6 @@ class UIActions:
         except Exception:    
             pass
         login_back_button.page.goto(CONFIG["HOTEL_BOOKING_URL"])
-
 
     @staticmethod
     def pick_day_from_datepicker(date_picker:Locator,days_locator:Locator,selected_day):
@@ -99,10 +99,11 @@ class UIActions:
         UIActions.click(rooms_titles)
         rooms = rooms_locator.all()
         for room in rooms:
-            if selected_room in room.inner_text():  # בודק את סוג החדר בתוך ה-card
-                room.locator("a.btn-primary").click()  # לוחץ על הכפתור של אותו חדר
+            if selected_room in room.inner_text():  
+                room.locator("a.btn-primary").click()  
                 break
-         
+        
+    
          
     
     

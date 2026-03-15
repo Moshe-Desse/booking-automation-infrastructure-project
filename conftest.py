@@ -1,20 +1,17 @@
 import json
 import os
+import sqlite3
 import time
 import uuid
 import pytest
 from pytest import FixtureRequest
-from data.api.chuck_api_data import *
-from data.web.sauce_demo_data import *
-from workflows.web.sauce_flows import *
 from utils.common_ops import load_config
-from playwright.sync_api import Playwright
-from workflows.api.chuck_api_flows import ChuckApiFlows
+from playwright.sync_api import Playwright,Page
+from extensions.db_actions import DBActions
 from data.web.hotel_booking_data import HOTEL_BOOKING_URL
-from workflows.web.grafana_web_flows import GrafanaWebFlows
 from workflows.api.hotel_booking_api_flows import HotelApiFlows
 from workflows.web.hotel_booking_flows import  HotelBookingFlows
-from data.api.hotel_booking_hotel_api_data import BOOKING_BASE_URL
+from data.api.hotel_booking_hotel_api_data import *
 from utils.fixture_helpers import attach_screenshot, attach_trace, get_browser
 
 # Load the configuration
@@ -38,22 +35,50 @@ def page(playwright: Playwright, request:FixtureRequest):
     browser.close()
 
 
+@pytest.fixture
+def reset_page_before_test(page:Page):
+    page.goto(HOTEL_BOOKING_URL)
+    yield
+
 @pytest.fixture(scope= "class")
 def request_context(playwright: Playwright, request:FixtureRequest):
     request_context=playwright.request.new_context(base_url=BOOKING_BASE_URL)
     yield request_context
     request_context.dispose()
 
+@pytest.fixture(scope="class",autouse=True)
+def db(request:FixtureRequest):
+    data_base = sqlite3.connect(CONFIG["DB_PATH"])
+    db_actions = DBActions(data_base)
+    yield db_actions
+    db_actions.close_db()
+
 
 @pytest.fixture
-def sauce_flows(page):
-    return GrafanaWebFlows(page)
+def hotel_DB_booking_flows(request_context):
+    return 
+
+@pytest.fixture
+def hotel_api_flows(request_context):
+    return HotelApiFlows(request_context)
+
+@pytest.fixture
+def hotel_booking_flows(page):
+    return HotelBookingFlows(page)
+
+@pytest.fixture
+def logged_in_flows(hotel_booking_flows):
+    hotel_booking_flows.navigate_to_admin_page()
+    hotel_booking_flows.sign_in(USER_NAME,PASSWORD)
+    return hotel_booking_flows
 
 
 @pytest.fixture
-def chuck_flows(request_context):
-    return ChuckApiFlows(request_context)
-
+def calendar_data():
+    path = "data/web/hotel_booking_calendar_data.json"
+    with open(path, "r") as f:
+        return json.load(f)["calendar_data"]
+    
 #Listen to console messages
 def handle_console_message(msg):
     if msg.type == "error":
@@ -61,7 +86,6 @@ def handle_console_message(msg):
     if "the server responded with a status of 404" in msg.text:
         raise AssertionError(f"Test Failed: 404 Error Detected in Console - {msg.text}")
     
-
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
@@ -92,18 +116,3 @@ def pytest_runtest_makereport(item, call):
 
 
 
-@pytest.fixture
-def hotel_api_flows(request_context):
-    return HotelApiFlows(request_context)
-
-
-@pytest.fixture
-def hotel_booking_flows(page):
-    return HotelBookingFlows(page)
-
-
-@pytest.fixture
-def calendar_data():
-    path = "data/web/hotel_booking_calendar_data.json"
-    with open(path, "r") as f:
-        return json.load(f)["calendar_data"]

@@ -10,7 +10,6 @@ class HotelBooking:
         self.next_month_button = page.locator("[class^='react-datepicker__navigation-icon react-datepicker__navigation-icon--next']")
         self.previous_month_button = page.locator("[class^='react-datepicker__navigation-icon react-datepicker__navigation-icon--p']")
         self.availability_button = page.locator("[class^='btn btn-primary w']")
-        self.booking_room_button = page.locator("//a[contains(@href,'/reservation/') and contains(@class,'btn-primary')]") 
         self.in_day = page.locator("[aria-label='Choose Sunday, 1 March 2026']") 
         self.rooms_full_cards = page.locator("[class='[class='card h-100 shadow-sm room-card']']")
         

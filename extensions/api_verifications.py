@@ -36,7 +36,7 @@ class APIVerify:
         """
         for key, value in expected_data.items():
             assert key in response_data, f"Key '{key}' not found in the response JSON"
-            assert response_data[key] == value, (
+            assert str(response_data[key]) == value, (
                 f"Expected value for key '{key}' is '{value}', but got '{response_data[key]}'"
             )
 
@@ -63,3 +63,11 @@ class APIVerify:
             error_message = "\n".join(APIVerify.errors)
             APIVerify.errors.clear()  # Clear errors after raising
             raise AssertionError(f"Soft assertion failures:\n{error_message}")
+        
+    @staticmethod
+    def list_size_equals(data_list, expected_size: int):
+        """
+        Verifies that the number of items in a list matches the expected size.
+        """
+        assert len(data_list) == expected_size, \
+            f"Expected {expected_size} items, but found {len(data_list)}"

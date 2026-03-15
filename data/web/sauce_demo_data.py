@@ -1,6 +1,0 @@
-SAUCE_URL = "https://www.saucedemo.com/"
-USER_NAME = "standard_user"
-PASSWORD = "secret_sauce"
-LOGIN_ERROR_MESSAGE = "Epic sadface"
-EXPECTED_HOME_HEADER = "Products"
-GRAFANA_URL = "http://localhost:3000/login"
