@@ -1,11 +1,12 @@
 {
     "BROWSER_TYPE":"CHROME",
     "HEADLESS":false,
-    "SLOW_MO":500,
+    "SLOW_MO":300,
     "DEFAULT_COMMAND_TIMEOUT" : 10000, 
     "TRACES_DIR": "traces/",
     "ALLURE_RESULTS_DIR": "allure-results",
     "SCREENSHOT_PREFIX": "screenshot",
-    "TRACE_PREFIX": "trace"
+    "TRACE_PREFIX": "trace",
+    "DB_PATH": "data/db/hotels.db"
 
 }

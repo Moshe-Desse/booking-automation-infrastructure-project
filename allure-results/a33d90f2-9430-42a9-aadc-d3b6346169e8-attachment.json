@@ -1,0 +1,38 @@
+{
+    "rooms": [
+        {
+            "roomid": 4,
+            "roomName": "104",
+            "type": "Twin",
+            "accessible": true,
+            "image": "https://www.mwtestconsultancy.co.uk/img/room1.jpg",
+            "description": "Please enter a description for this room",
+            "features": [
+                "WiFi",
+                "TV",
+                "Radio",
+                "Refreshments",
+                "Safe",
+                "Views"
+            ],
+            "roomPrice": 275
+        },
+        {
+            "roomid": 5,
+            "roomName": "104",
+            "type": "Twin",
+            "accessible": true,
+            "image": "https://www.mwtestconsultancy.co.uk/img/room1.jpg",
+            "description": "Please enter a description for this room",
+            "features": [
+                "WiFi",
+                "TV",
+                "Radio",
+                "Refreshments",
+                "Safe",
+                "Views"
+            ],
+            "roomPrice": 275
+        }
+    ]
+}

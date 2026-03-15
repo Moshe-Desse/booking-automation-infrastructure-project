@@ -2,6 +2,7 @@ import csv
 import os
 import json
 
+
 def load_config():
     """Loads the configuration from config.json and returns it as a dictionary."""
     # Get the absolute path of the current directory where conftest.py is located
@@ -32,3 +33,5 @@ def read_data_from_csv(file_path):
 def read_data_from_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as json_file:
         return json.load(json_file)
+
+
