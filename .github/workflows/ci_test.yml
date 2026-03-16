@@ -23,9 +23,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Playwright Browsers
-        # זו הפקודה הקריטית שמתקינה את הדפדפנים על מכונת האובונטו
         run: playwright install --with-deps
 
-      - name: Run Playwright Tests
-        # כאן אנחנו מריצים את הכל
-        run: pytest
+      - name: List Files (Debug)
+        # השלב הזה יעזור לנו לראות איפה הקבצים שלך נמצאים בתוך המכונה
+        run: ls -R
+
+      - name: Run Pytest
+        # הוספנו -v כדי לראות פירוט של מה קורה
+        run: pytest -v
