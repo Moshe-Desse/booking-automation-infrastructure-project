@@ -27,7 +27,7 @@ def page(playwright: Playwright, request:FixtureRequest):
     page.goto(HOTEL_BOOKING_URL)
     yield page    
     test_name = request.node.name
-    trace_filename = f"./{CONFIG["TRACES_DIR"]}/trace_{test_name}.zip"
+    trace_filename = f"./{CONFIG['TRACES_DIR']}/trace_{test_name}.zip"
     context.tracing.stop(path=trace_filename) # Stop tracing and save the trace to a file.
     #Best practice: Close page before context
     page.close()
