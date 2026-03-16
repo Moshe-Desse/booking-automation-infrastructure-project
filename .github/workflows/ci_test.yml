@@ -1,32 +1,39 @@
-name: Automation Playwright Tests
+name: Hotel Booking Automation Tests
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  run-playwright:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # כאן אנחנו מגדירים את הריצות המקבילות
+        browser_name: ['CHROME', 'FIREFOX']
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
+          playwright install --with-deps
 
-      - name: Install Playwright Browsers
-        run: playwright install --with-deps
+      # --- עדכון הנתיב לתיקיית config ---
+      - name: Update Config for ${{ matrix.browser_name }}
+        run: |
+          sed -i 's/"BROWSER_TYPE":"CHROME"/"BROWSER_TYPE":"${{ matrix.browser_name }}"/g' config/config.json
+          echo "Updated Config Content:"
+          cat config/config.json
 
       - name: Run Pytest
-        # הפקודה הזו מגדירה שהתיקייה הנוכחית היא הבסיס לכל ה-Imports
-        env:
-          PYTHONPATH: .
         run: xvfb-run pytest tests/ -v
