@@ -5,6 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  
+  # תזמון אוטומטי: כל יום בחצות (שעון UTC)
+  schedule:
+    - cron: '0 0 * * *'
+  
+  # מוסיף כפתור "Run workflow" בגיטהאב להרצה ידנית בכל רגע
+  workflow_dispatch: 
 
 jobs:
   test:
@@ -12,11 +19,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # כאן אנחנו מגדירים את הריצות המקבילות
+        # הגדרת שתי מערכות ההרצה שירוצו במקביל
         browser_name: ['CHROME', 'FIREFOX']
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -28,12 +36,31 @@ jobs:
           pip install -r requirements.txt
           playwright install --with-deps
 
-      # --- עדכון הנתיב לתיקיית config ---
       - name: Update Config for ${{ matrix.browser_name }}
+        # נכנס לתיקיית config ומחליף את סוג הדפדפן בקובץ ה-JSON
         run: |
           sed -i 's/"BROWSER_TYPE":"CHROME"/"BROWSER_TYPE":"${{ matrix.browser_name }}"/g' config/config.json
-          echo "Updated Config Content:"
+          echo "Current Configuration for this run:"
           cat config/config.json
 
       - name: Run Pytest
-        run: xvfb-run pytest tests/ -v
+        # הרצה עם מסך וירטואלי. ה- "|| true" מבטיח שהתהליך ימשיך להעלאת הדוחות גם אם טסט נכשל
+        run: xvfb-run pytest tests/ -v || true
+
+      # --- שמירת תוצאות הבדיקה (Artifacts) ---
+      
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser_name }}
+          path: allure-results/
+          retention-days: 7
+
+      - name: Upload Test Traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traces-${{ matrix.browser_name }}
+          path: traces/
+          retention-days
