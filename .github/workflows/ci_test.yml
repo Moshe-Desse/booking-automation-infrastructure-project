@@ -25,10 +25,8 @@ jobs:
       - name: Install Playwright Browsers
         run: playwright install --with-deps
 
-      - name: List Files (Debug)
-        # השלב הזה יעזור לנו לראות איפה הקבצים שלך נמצאים בתוך המכונה
-        run: ls -R
-
       - name: Run Pytest
-        # הוספנו -v כדי לראות פירוט של מה קורה
-        run: pytest -v
+        # הפקודה הזו מגדירה שהתיקייה הנוכחית היא הבסיס לכל ה-Imports
+        env:
+          PYTHONPATH: .
+        run: pytest tests/ -v
