@@ -59,11 +59,19 @@ class APIActions:
 
     def _log_response(self, response):
         """
-        Log response details to Allure report.
+        Log response details to Allure report Handles both JSON and Text/HTML.
         """
-        allure.attach(
-            json.dumps(response.json(), indent=4),
-            name=f"API Response - {response.status}",
-            attachment_type=allure.attachment_type.JSON
-        )
+        try:
+            response_json = response.json()
+            allure.attach(
+                json.dumps(response_json, indent=4),
+                name=f"API Response (JSON) - {response.status}",
+                attachment_type=allure.attachment_type.JSON
+                        )   
+        except:
+            allure.attach(
+                response.text(),
+                name=f"API Response (Text/HTML) - {response.status}",
+                attachment_type=allure.attachment_type.TEXT
+            )
 

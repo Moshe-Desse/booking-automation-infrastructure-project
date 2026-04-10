@@ -5,7 +5,8 @@ import pytest
 from data.web.hotel_booking_data import *
 from extensions.api_verifications import APIVerify
 from extensions.web_verifications import WebVerify
-from workflows.api.hotel_booking_api_flows import HotelApiFlows
+from utils.common_ops import read_data_from_csv
+from workflows.api.hotel_booking_api_flows import HotelApiFlows  
 from workflows.web.hotel_booking_flows import HotelBookingFlows
 
 
@@ -32,14 +33,15 @@ class TestHotelBooking:
     @allure.description("This Test Verifies that a booking reservation can be created successfully")
     def test03_verify_hotel_reservation(self, hotel_booking_flows: HotelBookingFlows,reset_page_before_test):
         hotel_booking_flows.navigate_to_booking_page()
-        hotel_booking_flows.select_reservation_booking_dates("17","25")
+        hotel_booking_flows.select_reservation_booking_dates(CHECK_IN_DATES,CHECK_OUT_DATES)
         hotel_booking_flows.choose_available_room()
         hotel_booking_flows.fill_reservation_infomation(GUSSE_FIRST_NAME,GUSSE_LAST_NAME,GUSSE_EMAIL,GUSSE_PHONE_NUMBER)
         WebVerify.text(hotel_booking_flows.reservation.confirmed_reservation_message,EXPECTED_CONFIRMED_BOOKING_MESSAGE)
 
 
     @allure.title("Test 04 - Admin Creates a New Room")
-    @allure.description("This test verifies that an administrator can create a new room from the Admin Dashboard")
+    @allure.description("This test verifies end-to-end room creation by creating a room via the Admin Dashboard UI "
+                        "and validating the room data via API")
     def test04_verify_createing_room_possitive(self,logged_in_flows:HotelBookingFlows, hotel_api_flows: HotelApiFlows):
         logged_in_flows.create_new_room(ROOM_NUMBER,ROOM_PRICE,BED_TYPE,ACCESSIBLE)    
         room_data = hotel_api_flows.get_room_details_by_number(ROOM_NUMBER)
@@ -77,5 +79,10 @@ class TestHotelBooking:
         WebVerify.text(hotel_booking_flows.reservation.confirmed_reservation_message,EXPECTED_CONFIRMED_BOOKING_MESSAGE)
 
 
+    def test08_verify_create_rooms_from_csv(self,logged_in_flows:HotelBookingFlows):
+        before_count = logged_in_flows.get_rooms_count()
+        added_rooms = logged_in_flows.create_rooms_from_csv("data/web/rooms.csv")
+        after_count = logged_in_flows.get_rooms_count()
+        WebVerify.strings_are_equal(before_count + added_rooms, after_count)
 
-    
+     

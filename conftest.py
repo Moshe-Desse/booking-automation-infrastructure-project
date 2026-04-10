@@ -53,7 +53,6 @@ def db(request:FixtureRequest):
     yield db_actions
     db_actions.close_db()
 
-
 @pytest.fixture
 def hotel_DB_booking_flows(request_context):
     return 
@@ -113,6 +112,3 @@ def pytest_runtest_makereport(item, call):
                 trace_name = f"{CONFIG['TRACE_PREFIX']}_{item.name}_{timestamp}.zip"
                 trace_path = os.path.join(CONFIG['ALLURE_RESULTS_DIR'], trace_name)
                 attach_trace(page, item.name, trace_path)
-
-
-

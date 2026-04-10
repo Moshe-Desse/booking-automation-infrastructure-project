@@ -1,0 +1,11 @@
+{
+    "bookingid": 4,
+    "roomid": 1,
+    "firstname": "Yossi",
+    "lastname": "Automation",
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-05-01",
+        "checkout": "2026-05-05"
+    }
+}

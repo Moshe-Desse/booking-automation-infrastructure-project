@@ -1,0 +1,4 @@
+room_number,room_price,bed_type,accessible
+104,100,Double,true
+105,120,Single,false
+106,150,Family,true

@@ -1,0 +1,54 @@
+{
+  "default_booking": {
+    "roomid": 1,
+    "firstname": "Dasko",
+    "lastname": "Automation",
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-04-01",
+      "checkout": "2026-04-05"
+    },
+    "email": "test@example.com",
+    "phone": "05012345678"
+  },
+  "alternate_booking": {
+    "roomid": 1,
+    "firstname": "Yossi",
+    "lastname": "Tester",
+    "depositpaid": false,
+    "bookingdates": {
+      "checkin": "2026-05-01",
+      "checkout": "2026-05-03"
+    }
+  },
+  "negative_testing_booking": {
+    "roomid": 1,
+    "firstname": "Conflict",
+    "lastname": "User",
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-06-02",
+      "checkout": "2026-06-07"
+    }
+  },
+  "update_conflict_target": {
+    "roomid": 1,
+    "firstname": "Target",
+    "lastname": "Booking",
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-08-10",
+      "checkout": "2026-08-15"
+    }
+  },
+  "update_conflict_victim": {
+    "roomid": 1,
+    "firstname": "Victim",
+    "lastname": "ToUpdate",
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-09-10",
+      "checkout": "2026-09-15"
+    }
+  }
+}
