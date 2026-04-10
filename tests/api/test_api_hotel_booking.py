@@ -44,7 +44,7 @@ class TestHotelBookingApi:
     @allure.title("Test 04 - Verify Create Room via API")
     @allure.description("This test verifies that a new room can be successfully created via the API")
     def test_04_verify_create_room_with_api(self, hotel_api_flows: HotelApiFlows):
-        response = hotel_api_flows.execute_room_creation(NEW_ROOM_DATA)
+        response = hotel_api_flows.execute_room_creation(NEW_ROOM_DATA_01)
         APIVerify.status_code(response, EXPECTED_STATUS_SUCCESS_CODE)
 
     @pytest.mark.functional
@@ -103,7 +103,7 @@ class TestHotelBookingApi:
     @allure.description("This test ensures that the API returns a 409 Conflict when attempting to create a second booking with the same room and dates.")
     def test_09_verify_no_duplicate_booking_allowed(self,hotel_api_flows: HotelApiFlows):
         payload_data = read_data_from_json("data/api/booking.json")
-        booking_payload = payload_data["duplicate_booking_payload"]
+        booking_payload = payload_data["negative_testing_booking"]
         response_01 = hotel_api_flows.execute_booking_creation(booking_payload)
         APIVerify.status_code(response_01,EXPECTED_CREATED_SUCCESS_CODE)
         response_02 = hotel_api_flows.execute_booking_creation(booking_payload)
@@ -125,3 +125,81 @@ class TestHotelBookingApi:
     def test_11_verify_get_all_rooms(self, hotel_api_flows: HotelApiFlows):
         rooms_json = hotel_api_flows.get_rooms_raw_json()
         APIVerify.json_key_exists(rooms_json, "rooms")
+
+    @pytest.mark.functional
+    @pytest.mark.regression
+    @allure.title("Test 12 - Create Room and Verify in List")
+    def test_12_verify_room_are_add_after_creating(self,hotel_api_flows:HotelApiFlows):
+        creat_room_response = hotel_api_flows.execute_room_creation(NEW_ROOM_DATA_02)
+        APIVerify.status_code(creat_room_response,EXPECTED_STATUS_SUCCESS_CODE)
+        room_json = hotel_api_flows.get_rooms_raw_json()
+        APIVerify.json_key_exists(room_json,"rooms")
+
+    @pytest.mark.functional
+    @allure.title("Test 13 - Verify Message Count")
+    @allure.description("Check that the message count API returns 200 OK and valid JSON data.")
+    def test_13_verify_message_count(self, hotel_api_flows: HotelApiFlows):
+        response = hotel_api_flows.get_message_count()
+        APIVerify.status_code(response, EXPECTED_STATUS_SUCCESS_CODE)
+        APIVerify.json_key_exists(response.json(), "count")
+
+    @pytest.mark.functional
+    @allure.title("Test 14 - Verify Hotel Branding Information")
+    @allure.description("This test verifies that the hotel branding details (like name) are returned correctly.")
+    def test_14_verify_hotel_branding(self, hotel_api_flows: HotelApiFlows):
+        response = hotel_api_flows.get_hotel_branding()
+        APIVerify.status_code(response, EXPECTED_STATUS_SUCCESS_CODE)
+        APIVerify.json_key_exists(response.json(), "name")
+
+    @pytest.mark.functional
+    @pytest.mark.regression
+    @allure.title("Test 15 - Get Specific Room Details")
+    @allure.description("This test verifies that the API returns correct details for room ID 1.")
+    def test_15_get_specific_room(self, hotel_api_flows: HotelApiFlows):
+        response = hotel_api_flows.get_room_details_by_id(1)
+        APIVerify.status_code(response, EXPECTED_STATUS_SUCCESS_CODE)
+        APIVerify.json_key_exists(response.json(), "roomName")
+
+    @pytest.mark.negative
+    @allure.title("Test 16 - Verify Unauthorized Access to Bookings is Blocked")
+    @allure.description("This test ensures that the API returns 401 Unauthorized when attempting to fetch all bookings without a token.")
+    def test_16_verify_unauthorized_bookings_accesss(self, hotel_api_flows: HotelApiFlows):
+        response = hotel_api_flows.get_all_bookings_list_unauthorized()
+        APIVerify.status_code(response, EXPECTED_UNAUTHORIZED_CODE)
+
+    #========================================================================================#
+    # TEST  - The server is having a mid-life crisis and returns 500. 
+    # Keeping it RED to show the audience that I actually found something broken. #JobSecurity
+    #========================================================================================#
+    @pytest.mark.negative
+    @allure.title("Test 17 - Verify Delete Non-Existent Booking Fails")
+    @allure.description("This test attempts to delete a booking with an invalid ID to verify error handling.")
+    def test_17_delete_non_existent_booking(self, hotel_api_flows: HotelApiFlows):
+        invalid_id = 9999
+        response = hotel_api_flows.delete_booking_by_id(invalid_id)
+        APIVerify.status_code(response, EXPECTED_DELETE_CODE)
+       
+    @pytest.mark.performance
+    @allure.title("Test 18 - Verify API Response Latency")
+    @allure.description("This test ensures that the health check endpoint responds within an acceptable timeframe (1.5s).")
+    def test_18_verify_api_latency(self, hotel_api_flows: HotelApiFlows):
+        latency = hotel_api_flows.get_health_check_latency()
+        APIVerify.response_time_less_than(latency, EXPECTED_LATENCY_MS)
+
+    @pytest.mark.functional
+    @allure.title("Test 19 - Verify Response Headers Content-Type")
+    @allure.description("This test verifies that the API returns the correct Content-Type header.")
+    def test_19_verify_headers(self, hotel_api_flows: HotelApiFlows):
+        headers = hotel_api_flows.get_api_response_headers()
+        APIVerify.header_value_contains(headers, "content-type", "application/json")
+
+    @pytest.mark.functional
+    @allure.title("Test 20 - Verify Branding JSON Schema")
+    @allure.description("This test verifies the structure of the branding response using APIVerify.")
+    def test_20_verify_branding_schema(self, hotel_api_flows: HotelApiFlows):
+        data = hotel_api_flows.get_branding_data()
+        APIVerify.json_key_exists(data, "name")
+        APIVerify.json_key_exists(data, "contact")
+        APIVerify.json_key_exists(data, "map")
+        APIVerify.json_key_exists(data["contact"], "email")
+        APIVerify.json_key_exists(data["map"], "latitude")

@@ -1,0 +1,72 @@
+{
+    "rooms": [
+        {
+            "roomid": 1,
+            "roomName": "101",
+            "type": "Single",
+            "accessible": true,
+            "image": "/images/room1.jpg",
+            "description": "Aenean porttitor mauris sit amet lacinia molestie. In posuere accumsan aliquet. Maecenas sit amet nisl massa. Interdum et malesuada fames ac ante.",
+            "features": [
+                "TV",
+                "WiFi",
+                "Safe"
+            ],
+            "roomPrice": 100
+        },
+        {
+            "roomid": 2,
+            "roomName": "102",
+            "type": "Double",
+            "accessible": true,
+            "image": "/images/room2.jpg",
+            "description": "Vestibulum sollicitudin, lectus ac mollis consequat, lorem orci ultrices tellus, eleifend euismod tortor dui egestas erat. Phasellus et ipsum nisl. ",
+            "features": [
+                "TV",
+                "Radio",
+                "Safe"
+            ],
+            "roomPrice": 150
+        },
+        {
+            "roomid": 3,
+            "roomName": "103",
+            "type": "Suite",
+            "accessible": true,
+            "image": "/images/room3.jpg",
+            "description": "Etiam metus metus, fringilla ac sagittis id, consequat vel neque. Nunc commodo quis nisl nec posuere. Etiam at accumsan ex. ",
+            "features": [
+                "Radio",
+                "WiFi",
+                "Safe"
+            ],
+            "roomPrice": 225
+        },
+        {
+            "roomid": 4,
+            "roomName": "101",
+            "type": "Suite",
+            "accessible": true,
+            "image": "https://link-to-image.com/room.png",
+            "description": "Nice suite with freshing Mini Bar and WiFi",
+            "features": [
+                "WiFi",
+                "Mini Bar"
+            ],
+            "roomPrice": 300
+        },
+        {
+            "roomid": 5,
+            "roomName": "104",
+            "type": "Suite",
+            "accessible": true,
+            "image": "https://link-to-image.com/room104.png",
+            "description": "\u05d7\u05d3\u05e8 \u05de\u05e4\u05e0\u05e7 \u05e2\u05dd \u05e0\u05d5\u05e3 \u05dc\u05d9\u05dd",
+            "features": [
+                "WiFi",
+                "Mini Bar"
+            ],
+            "roomPrice": 500
+        }
+    ]
+}

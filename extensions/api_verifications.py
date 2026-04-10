@@ -71,3 +71,21 @@ class APIVerify:
         """
         assert len(data_list) == expected_size, \
             f"Expected {expected_size} items, but found {len(data_list)}"
+        
+    @staticmethod
+    def response_time_less_than(latency: float, max_allowed_ms: int):
+        """
+        Verifies that the API response time is within the allowed limit.
+        """
+        assert latency < max_allowed_ms, \
+            f"API is too slow! Latency: {latency:.2f}ms (Max allowed: {max_allowed_ms}ms)"
+
+    @staticmethod
+    def header_value_contains(headers: dict, header_name: str, expected_value: str):
+        """
+        Verifies that a specific header exists and contains the expected value.
+        """
+        header_name_lower = header_name.lower()
+        assert header_name_lower in headers, f"Header '{header_name}' is missing!"
+        assert expected_value in headers[header_name_lower], \
+            f"Expected {expected_value} in {header_name}, but got {headers[header_name_lower]}"

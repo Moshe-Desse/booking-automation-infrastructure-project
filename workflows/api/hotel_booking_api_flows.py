@@ -1,4 +1,5 @@
 import json
+import time
 import allure
 from extensions.api_actions import APIActions
 from data.api.hotel_booking_hotel_api_data import *
@@ -90,6 +91,7 @@ class HotelApiFlows:
         response = self.api.get(url)
         print(f"\nResponse {response}")
         print(f"\nApi response status{response.status}")
+        print(f"\nRooms JSON Response:\n{json.dumps(response.json(), indent=4)}")
         return response.json()
 
     @allure.step("API Step: Find Room Details by Number: {room_number}")
@@ -101,6 +103,70 @@ class HotelApiFlows:
             if str(room.get("roomName")) == str(room_number):
                 print(json.dumps(room))
                 return room
+
+    @allure.step("API Step: Get Message Count")
+    def get_message_count_json(self) -> dict:
+        url = f"{BOOKING_BASE_URL}message/count"
+        response = self.api.get(url)
+        print(f"\nMessage Count JSON:\n{json.dumps(response.json(),indent=4)}")
+        return response
+
+    @allure.step("API Step: Get Hotel Branding Details")
+    def get_hotel_branding(self):
+        url = f"{BOOKING_BASE_URL}branding/"
+        response = self.api.get(url)
+        response_data = response.json()
+        print("\nHotel Branding:")
+        print(f"\n{json.dumps(response.json(),indent=4)}")
+        return response
+
+    @allure.step("API Step: Get Room Details by ID: {room_id}")
+    def get_room_details_by_id(self, room_id: int) -> APIResponse:
+        url = f"{BOOKING_BASE_URL}room/{room_id}"
+        response = self.api.get(url)
+        response_data = response.json()
+        print("\nRoom Details by ID:")
+        print(f"\n{json.dumps(response.json(),indent=4)}")
+        print(response_data)
+        return response
+
+    @allure.step("API Step: Get All Bookings List (Unauthorized Check)")
+    def get_all_bookings_list_unauthorized(self) -> APIResponse:
+        url = f"{BOOKING_BASE_URL}booking/"
+        response = self.api.get(url) 
+        print("\nNegative Test - Unauthorized Access Result:")
+        try:
+            print(f"\n{json.dumps(response.json(), indent=4)}")
+        except:
+            print(f"\nResponse Body: {response.text()}")          
+        return response
+    
+    @allure.step("API Step: Measure Health Check Latency")
+    def get_health_check_latency(self) -> float:
+        start_time = time.time()    
+        response = self.api.get(f"{BOOKING_BASE_URL}auth/actuator/health") 
+        end_time = time.time()
+        duration_ms = (end_time - start_time) 
+        print(f"\nHealth Check Latency: {duration_ms:.2f}ms")
+        return duration_ms
+
+    @allure.step("API Step: Get API Headers")
+    def get_api_response_headers(self) -> dict:
+        url = f"{BOOKING_BASE_URL}branding/"
+        response = self.api.get(url)
+        headers = dict(response.headers)
+        print("\nResponse Headers:")
+        print(f"\n{json.dumps(headers, indent=4)}")
+        return headers
+
+    @allure.step("API Step: Get Branding Data")
+    def get_branding_data(self) -> dict:
+        url = f"{BOOKING_BASE_URL}branding/"
+        response = self.api.get(url)
+        data = response.json()
+        print("\nBranding Data Received:")
+        print(json.dumps(data, indent=4))
+        return data
 
     # --- POST Request Section ---
 
