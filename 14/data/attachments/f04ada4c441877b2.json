@@ -1,0 +1,28 @@
+{
+    "messages": [
+        {
+            "id": 1,
+            "name": "James Dean",
+            "subject": "Booking enquiry",
+            "read": false
+        },
+        {
+            "id": 2,
+            "name": "ttt ttt",
+            "subject": "You have a new booking!",
+            "read": false
+        },
+        {
+            "id": 3,
+            "name": "Dasko Automation",
+            "subject": "You have a new booking!",
+            "read": false
+        },
+        {
+            "id": 4,
+            "name": "Dasko Automation",
+            "subject": "You have a new booking!",
+            "read": false
+        }
+    ]
+}
