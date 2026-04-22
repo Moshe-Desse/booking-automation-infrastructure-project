@@ -8,6 +8,7 @@ class HotelBookingMain:
         self.book_now_button = page.locator("[class^='btn btn-primary b']")
         self.main_header = page.locator("[class='display-4 fw-bold mb-4']")
         self.booking_room_button = page.locator("//a[contains(@href,'/reservation/') and contains(@class,'btn-primary')]") 
+        self.footer_container = page.locator("[class='bg-dark text-white py-5']")
 
 
         

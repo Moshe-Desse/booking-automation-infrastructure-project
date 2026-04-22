@@ -78,6 +78,28 @@ class HotelBookingFlows:
     def click_return_home_button(self):
         UIActions.click(self.reservation.return_home_page_button)
 
+    @allure.step("Select past booking dates:")
+    def select_past_reservation_booking_dates(self, target_month: str, from_day: str, to_day: str):
+        UIActions.click(self.booking.check_in_calendar) 
+        while self.booking.current_month_year.inner_text() != target_month:
+            UIActions.force_click(self.booking.previous_month_button)
+        UIActions.pick_day_from_datepicker(self.booking.check_in_calendar, self.booking.days, from_day)
+        UIActions.click(self.booking.check_out_calendar)
+        while self.booking.current_month_year.inner_text() != target_month:
+            UIActions.force_click(self.booking.previous_month_button)     
+        UIActions.pick_day_from_datepicker(self.booking.check_out_calendar, self.booking.days, to_day)
+    
+    @allure.step("Select past booking dates:")
+    def select_opsite_reservation_booking_dates(self, target_month: str, from_day: str, to_day: str):
+        UIActions.click(self.booking.check_in_calendar) 
+        while self.booking.current_month_year.inner_text() != target_month:
+            UIActions.force_click(self.booking.next_month_button)
+        UIActions.pick_day_from_datepicker(self.booking.check_in_calendar, self.booking.days, from_day)
+        UIActions.click(self.booking.check_out_calendar)
+        while self.booking.current_month_year.inner_text() != target_month:
+            UIActions.force_click(self.booking.next_month_button)     
+        UIActions.pick_day_from_datepicker(self.booking.check_out_calendar, self.booking.days, to_day)
+
     #==================
     # Creating Function
     #==================
@@ -130,6 +152,11 @@ class HotelBookingFlows:
     # Get data Functions
     #===================
 
+    def get_footer_text(self):
+        footer_info = self.main.footer_container.inner_text()
+        print(f"\n{footer_info}")
+        return footer_info
+
     @allure.step("Get all available rooms")
     def get_all_available_rooms(self):
         UIActions.get_text(self.admin_rooms)
@@ -140,10 +167,14 @@ class HotelBookingFlows:
 
     @allure.step("Get rooms count from admin table")
     def get_rooms_count(self):
-        self.admin_rooms.room_number_list.first.wait_for(state="visible", timeout=5000)
+        self.admin_rooms.create_room_button.wait_for(state="visible", timeout=5000)
         total_rooms = self.admin_rooms.room_number_list.count()
         print(f"\nThe total rooms now: {total_rooms}")
         return total_rooms
+
+    #===================
+    # Remove Functions
+    #===================
 
     @allure.step("Remove all rooms from admin table:")
     def remove_all_rooms(self):
@@ -153,6 +184,10 @@ class HotelBookingFlows:
                 UIActions.click(rooms.first)
                 self.page.wait_for_timeout(500)
         
+    #===================
+    # Create Functions
+    #===================
+
     @allure.step("Creates multiple rooms based on CSV data:")
     def create_rooms_from_csv(self, file_path):
         rooms = read_data_from_csv(file_path)
@@ -167,3 +202,8 @@ class HotelBookingFlows:
             self.page.wait_for_timeout(500)
         self.page.wait_for_timeout(1000)
         return len(rooms)
+
+
+    @allure.step("Force select a specific date from the past (Jan 2024):")
+    def select_specific_past_date(self):
+         self.booking.check_in_calendar()

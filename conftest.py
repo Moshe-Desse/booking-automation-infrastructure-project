@@ -8,7 +8,7 @@ from pytest import FixtureRequest
 from utils.common_ops import load_config
 from playwright.sync_api import Playwright,Page
 from extensions.db_actions import DBActions
-from data.web.hotel_booking_data import HOTEL_BOOKING_URL
+from data.web.hotel_booking_data import HOTEL_BOOKING_URL, USER_NAME, PASSWORD
 from workflows.api.hotel_booking_api_flows import HotelApiFlows
 from workflows.web.hotel_booking_flows import  HotelBookingFlows
 from data.api.hotel_booking_hotel_api_data import *
@@ -65,12 +65,26 @@ def hotel_api_flows(request_context):
 def hotel_booking_flows(page):
     return HotelBookingFlows(page)
 
-@pytest.fixture
-def logged_in_flows(hotel_booking_flows):
-    hotel_booking_flows.navigate_to_admin_page()
-    hotel_booking_flows.sign_in(USER_NAME,PASSWORD)
-    return hotel_booking_flows
+# @pytest.fixture
+# def logged_in_flows(hotel_booking_flows, page:Page):
+#     page.goto(HOTEL_BOOKING_URL)
+#     hotel_booking_flows.navigate_to_admin_page()
+#     hotel_booking_flows.sign_in(USER_NAME,PASSWORD)
+#     return hotel_booking_flows
 
+@pytest.fixture
+def logged_in_flows(hotel_booking_flows, page: Page):
+    page.goto(HOTEL_BOOKING_URL)    
+    hotel_booking_flows.navigate_to_admin_page()    
+    # 3. שימוש בלוקטור שלך לבדיקת לוגין
+    user_field = hotel_booking_flows.login.user_name_field    
+    try:
+        user_field.wait_for(state="visible", timeout=2000)
+        hotel_booking_flows.sign_in(USER_NAME, PASSWORD)
+    except:
+        # אם לא מצא את השדה, סימן שאנחנו כבר מחוברים. ממשיכים הלאה.
+        pass
+    return hotel_booking_flows
 
 @pytest.fixture
 def calendar_data():

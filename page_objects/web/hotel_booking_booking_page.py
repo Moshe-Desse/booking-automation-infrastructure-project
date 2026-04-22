@@ -12,4 +12,5 @@ class HotelBooking:
         self.availability_button = page.locator("[class^='btn btn-primary w']")
         self.in_day = page.locator("[aria-label='Choose Sunday, 1 March 2026']") 
         self.rooms_full_card = page.locator("[class='card h-100 shadow-sm room-card']")
-                                                
+        self.current_month_year = page.locator("[class='react-datepicker__current-month']") # אני צריך לגרום לזה להיות על החודש שאני צריך - נובמבר 2025                                                
+        
