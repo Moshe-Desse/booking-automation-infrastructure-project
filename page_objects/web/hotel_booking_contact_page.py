@@ -11,3 +11,4 @@ class HotelBookingContact:
         self.contact_discription_field = page.locator("[id='description']")
         self.contact_thanks_message = page.locator("//*[@id='contact']/div//h3")
         self.contact_submit_button = page.locator("//*[@id='contact']/div//button")
+        self.contact_error_message = page.locator(".card-body .alert-danger")

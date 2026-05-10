@@ -1,0 +1,6 @@
+test_name,name,email,phone,subject,message,expected_error
+Empty_Name,,test@test.com,0501234567,Booking,I need help,Name may not be blank
+Invalid_Email,Moshe,test#test.com,0501234567,Booking,I need help,must be a well-formed email address
+Short_Phone,Moshe,test@test.com,123,Booking,I need help,Phone must be between 11 and 21 characters
+Empty_Subject,Moshe,test@test.com,0501234567,,I need help,Subject may not be blank
+Empty_Message,Moshe,test@test.com,0501234567,Booking,,Message may not be blank

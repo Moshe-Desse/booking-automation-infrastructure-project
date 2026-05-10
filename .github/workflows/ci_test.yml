@@ -1,11 +1,14 @@
-name: Hotel Booking Automation Tests
+name: Playwright Tests
 
 on:
+  # 1. מאפשר לך להריץ ידנית מה-GitHub Actions מתי שבא לך
+  workflow_dispatch:
+  # 2. ריצה אוטומטית בכל יום ב-02:00 בבוקר (שעון ישראל)
+  schedule:
+    - cron: '0 23 * * *'
+  # 3. ריצה בכל פעם שאתה עושה Push לקוד
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch: 
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -55,7 +58,7 @@ jobs:
 
   publish-report:
     runs-on: ubuntu-latest
-    needs: test # מבטיח שהפרסום יקרה רק אחרי ששני הדפדפנים סיימו
+    needs: test
     if: always()
     steps:
       - name: Checkout code
@@ -65,7 +68,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: all-results
-          merge-multiple: true # מאחד את התוצאות של כרום ופיירפוקס לתיקייה אחת
+          merge-multiple: true
 
       - name: Allure Report action from GitHub
         uses: simple-elf/allure-report-action@master

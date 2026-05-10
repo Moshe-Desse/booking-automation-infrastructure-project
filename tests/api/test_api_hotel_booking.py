@@ -175,8 +175,7 @@ class TestHotelBookingApi:
     @allure.title("Test 17 - Verify Delete Non-Existent Booking Fails")
     @allure.description("This test attempts to delete a booking with an invalid ID to verify error handling.")
     def test_17_delete_non_existent_booking(self, hotel_api_flows: HotelApiFlows):
-        invalid_id = 9999
-        response = hotel_api_flows.delete_booking_by_id(invalid_id)
+        response = hotel_api_flows.delete_booking_by_id(INVALID_ID)
         APIVerify.status_code(response, EXPECTED_DELETE_CODE)
        
     @pytest.mark.performance
@@ -203,3 +202,35 @@ class TestHotelBookingApi:
         APIVerify.json_key_exists(data, "map")
         APIVerify.json_key_exists(data["contact"], "email")
         APIVerify.json_key_exists(data["map"], "latitude")
+
+#============
+# Preformance
+#============
+
+    @pytest.mark.performance
+    @allure.title("Test 21 - API Load Testing with k6")
+    @allure.description("This test Checks if the system stays stable when many users use it at the same time")
+    def test_21_verify_system_stability_under_load(self):
+        js_path = "performance/hotel_load_test.js"
+        failure_rate = run_k6_test(js_path, vus=100)
+        print(f"\n[Performance Report] Failure Rate: {failure_rate * 100}%")        
+        assert failure_rate < 0.01, f"High failure rate detected: {failure_rate}"
+
+    @pytest.mark.performance
+    @allure.title("Test 22 - Finding Server Limit")
+    @allure.description("This test Finds the limit of how much load the server can take before it breaks")
+    def test_22_identify_server_break_point(self):
+        js_path = "performance/hotel_load_test.js"
+        failure_rate = run_k6_test(js_path, test_type="SCALING") # מפעילים את המדרגות (SCALING)
+        print(f"\n[Scaling Test] Failure Rate: {failure_rate * 100}%")
+        assert failure_rate < 0.50 # אנחנו מצפים שיהיו קצת שגיאות בעומס גבוה
+
+    @pytest.mark.performance
+    @allure.title("Test 23 - Spike Test (Sudden Load)")
+    @allure.description("This test Checks how the system handles a sudden, fast jump in the number of users")
+    def test_23_spike_test(self):
+        js_path = "performance/hotel_load_test.js"
+        failure_rate = run_k6_test(js_path, test_type="SPIKE")
+        print(f"\n[Spike Test] Failure Rate: {failure_rate * 100}%")
+        # ב-Spike אנחנו בודקים אם האתר בכלל שרד. אם יש יותר מ-80% שגיאות, האתר נפל.
+        assert failure_rate == 0.0, f"System could not handle the spike! Failure rate: {failure_rate * 100}%"

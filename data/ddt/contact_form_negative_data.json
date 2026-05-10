@@ -1,0 +1,322 @@
+[
+  {
+    "test_name": "Missing_Firstname",
+    "first_name": "",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Firstname should not be blank"
+  },
+  {
+    "test_name": "Missing_Lastname",
+    "first_name": "Dasko",
+    "last_name": "",
+    "email": "moshe@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Lastname should not be blank"
+  },
+  {
+    "test_name": "Invalid_Email_Format",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "dasko_at_music.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Phone_Too_Short",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "12345",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Phone_Too_Long",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "1234567890123456789012",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Firstname_Short_Boundary",
+    "first_name": "Da",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 18"
+  },
+  {
+    "test_name": "Lastname_Short_Boundary",
+    "first_name": "Dasko",
+    "last_name": "Mu",
+    "email": "moshe@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 30"
+  },
+  {
+    "test_name": "Empty_Email",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "",
+    "phone_number": "05012345678",
+    "expected_error": "must not be empty"
+  },
+  {
+    "test_name": "Empty_Phone",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "",
+    "expected_error": "must not be empty"
+  },
+  {
+    "test_name": "Email_Missing_Domain",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "dasko@",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Special_Chars_In_Phone",
+    "first_name": "Dasko",
+    "last_name": "Music",
+    "email": "moshe@test.com",
+    "phone_number": "050-MUSIC-NOW",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "All_Fields_Blank",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "phone_number": "",
+    "expected_error": "must not be empty"
+  },
+  {
+    "test_name": "Phone_Hebrew_Letters",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "אבגדהוזחטיכ",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Phone_Only_Special_Chars",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "!@#$%^&*()_+",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Phone_With_Spaces",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "050 123 4567",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Phone_SQL_Injection",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "050'; DROP TABLE users;--",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Phone_Negative_Number",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "-0501234567",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Email_Double_Dot",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "moshe..dassa@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Email_No_Username",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Email_Special_Char_Start",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "#moshe@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Email_With_Spaces",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "moshe @test.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Firstname_Numbers",
+    "first_name": "Moshe123",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Firstname should not contain numbers"
+  },
+  {
+    "test_name": "Lastname_Numbers",
+    "first_name": "Moshe",
+    "last_name": "Dassa123",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Lastname should not contain numbers"
+  },
+  {
+    "test_name": "Firstname_XSS_Injection",
+    "first_name": "<script>alert('xss')</script>",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 18"
+  },
+  {
+    "test_name": "Firstname_Very_Long",
+    "first_name": "MosheMosheMosheMosheMosheMoshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 18"
+  },
+  {
+    "test_name": "Lastname_Very_Long",
+    "first_name": "Moshe",
+    "last_name": "DassaDassaDassaDassaDassaDassaDassaDassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 30"
+  },
+  {
+    "test_name": "Firstname_Only_Spaces",
+    "first_name": "   ",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Firstname should not be blank"
+  },
+  {
+    "test_name": "Lastname_Only_Spaces",
+    "first_name": "Moshe",
+    "last_name": "   ",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Lastname should not be blank"
+  },
+  {
+    "test_name": "Firstname_Special_Chars",
+    "first_name": "Moshe!",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Firstname should not contain special characters"
+  },
+  {
+    "test_name": "Email_Numeric_Only",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "123456789",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Email_Too_Long",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Phone_With_Emoji",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "050123456😊",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Firstname_Emoji",
+    "first_name": "Moshe😊",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 18"
+  },
+  {
+    "test_name": "Firstname_SQL_Injection",
+    "first_name": "Moshe' OR 1=1--",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "Firstname should not be blank"
+  },
+  {
+    "test_name": "Email_HTML_Injection",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "<b>test@test.com</b>",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  },
+  {
+    "test_name": "Phone_Null_Byte",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "0501234567\u0000",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Firstname_Hebrew",
+    "first_name": "משה",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 18"
+  },
+  {
+    "test_name": "Lastname_Hebrew",
+    "first_name": "Moshe",
+    "last_name": "דסה",
+    "email": "test@test.com",
+    "phone_number": "05012345678",
+    "expected_error": "size must be between 3 and 30"
+  },
+  {
+    "test_name": "Phone_All_Zeros",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "test@test.com",
+    "phone_number": "00000000000",
+    "expected_error": "size must be between 11 and 21"
+  },
+  {
+    "test_name": "Email_Uppercase",
+    "first_name": "Moshe",
+    "last_name": "Dassa",
+    "email": "MOSHE@TEST.COM",
+    "phone_number": "05012345678",
+    "expected_error": "must be a well-formed email address"
+  }
+]

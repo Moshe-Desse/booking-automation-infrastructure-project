@@ -3,19 +3,30 @@ import os
 import sqlite3
 import time
 import uuid
+
 import pytest
+from appium import webdriver
+from google import genai
+from dotenv import load_dotenv
 from pytest import FixtureRequest
 from utils.common_ops import load_config
-from playwright.sync_api import Playwright,Page
+from workflows.ai.ai_flows import AiFlows # וודא שהנתיב נכון אצלך
 from extensions.db_actions import DBActions
-from data.web.hotel_booking_data import HOTEL_BOOKING_URL, USER_NAME, PASSWORD
+from playwright.sync_api import Playwright,Page
+from data.api.hotel_booking_hotel_api_data import *
+from workflows.ai.ai_agent_flows import AiAgentFlows
+from appium.options.android import UiAutomator2Options
 from workflows.api.hotel_booking_api_flows import HotelApiFlows
 from workflows.web.hotel_booking_flows import  HotelBookingFlows
-from data.api.hotel_booking_hotel_api_data import *
 from utils.fixture_helpers import attach_screenshot, attach_trace, get_browser
+from data.web.hotel_booking_data import HOTEL_BOOKING_URL, USER_NAME, PASSWORD
+
+# Load the .env
+DOTENV = load_dotenv()
 
 # Load the configuration
 CONFIG = load_config()     
+CONFIG["GEMINI_API_KEY"] = os.getenv("GEMINI_API_KEY")
 
 @pytest.fixture(scope="class")
 def page(playwright: Playwright, request:FixtureRequest):
@@ -24,6 +35,8 @@ def page(playwright: Playwright, request:FixtureRequest):
     context.tracing.start(screenshots=True, snapshots=True, sources=True) # Start tracing for this context.  
     #Listen to console messages       
     page = context.new_page()
+    page.set_default_timeout(10000)
+    page.set_default_navigation_timeout(10000)
     page.goto(HOTEL_BOOKING_URL)
     yield page    
     test_name = request.node.name
@@ -34,6 +47,39 @@ def page(playwright: Playwright, request:FixtureRequest):
     context.close()
     browser.close()
 
+
+@pytest.fixture(scope="class")
+def mobile_driver():
+    options = UiAutomator2Options()
+    options.platform_name = "Android"
+    options.automation_name = "UiAutomator2"
+    options.udid = "QCSGYPS8QWMFBQBI"
+    options.browser_name = "Chrome"
+    options.no_reset = True
+    driver = webdriver.Remote(
+        "http://127.0.0.1:4723",
+        options=options
+    )
+    yield driver
+    driver.quit()
+
+
+@pytest.fixture
+def ai_agent(page, ai_engine):
+    return AiAgentFlows(page, ai_engine)
+
+
+@pytest.fixture
+def ai_flows(page, ai_engine):
+    return AiFlows(page, ai_engine)
+
+@pytest.fixture
+def ai_engine():
+    api_key = CONFIG.get("GEMINI_API_KEY")
+    if not api_key:
+        pytest.fail("שכחת לשים את המפתח בקובץ .env או שלא התקנת python-dotenv")
+    client = genai.Client(api_key=api_key)
+    return client
 
 @pytest.fixture
 def reset_page_before_test(page:Page):
@@ -53,6 +99,13 @@ def db(request:FixtureRequest):
     yield db_actions
     db_actions.close_db()
 
+@pytest.fixture(scope="class")
+def db_rooms():
+    conn = sqlite3.connect(CONFIG["DB_ROOMS_PATH"]) # הנתיב לקובץ ששלחת לי
+    actions = DBActions(conn)
+    yield actions
+    actions.close_db()
+
 @pytest.fixture
 def hotel_DB_booking_flows(request_context):
     return 
@@ -65,24 +118,15 @@ def hotel_api_flows(request_context):
 def hotel_booking_flows(page):
     return HotelBookingFlows(page)
 
-# @pytest.fixture
-# def logged_in_flows(hotel_booking_flows, page:Page):
-#     page.goto(HOTEL_BOOKING_URL)
-#     hotel_booking_flows.navigate_to_admin_page()
-#     hotel_booking_flows.sign_in(USER_NAME,PASSWORD)
-#     return hotel_booking_flows
-
 @pytest.fixture
 def logged_in_flows(hotel_booking_flows, page: Page):
     page.goto(HOTEL_BOOKING_URL)    
     hotel_booking_flows.navigate_to_admin_page()    
-    # 3. שימוש בלוקטור שלך לבדיקת לוגין
     user_field = hotel_booking_flows.login.user_name_field    
     try:
         user_field.wait_for(state="visible", timeout=2000)
         hotel_booking_flows.sign_in(USER_NAME, PASSWORD)
     except:
-        # אם לא מצא את השדה, סימן שאנחנו כבר מחוברים. ממשיכים הלאה.
         pass
     return hotel_booking_flows
 

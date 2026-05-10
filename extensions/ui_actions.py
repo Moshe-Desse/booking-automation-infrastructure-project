@@ -1,3 +1,5 @@
+import random
+
 import allure
 from playwright.sync_api import Locator, Page
 
@@ -63,13 +65,11 @@ class UIActions:
             element.nth(i).click(timeout=timeout, force=True)
             element.page.wait_for_timeout(500)
                         
-    # @staticmethod
-    # @allure.step("Click all delete rooms button element:")
-    # def click_all_remove_button(element: Locator, timeout: int = DEFAULT_TIMEOUT) -> None:
-    #     element.first.wait_for(state="attached", timeout=timeout)
-    #     while element.count() > 0:
-    #         element.first.click()
-    #         element.page.wait_for_timeout(500)
+    @staticmethod
+    def click_random(elements):
+        for el in elements.all():
+            if random.choice([True, False]):
+                el.click()
 
     @staticmethod
     @allure.step("Click to reset page to main page")

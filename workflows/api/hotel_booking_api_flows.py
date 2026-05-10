@@ -12,7 +12,9 @@ class HotelApiFlows:
         self.api = APIActions(request_context)
         self.token = None
 
-    # --- Authentication Section ---
+    #=======================
+    # Authentication Section 
+    #=======================
 
     @allure.step("API Step: Check Service Health (Ping)")
     def check_service_health(self)-> APIResponse:
@@ -46,7 +48,9 @@ class HotelApiFlows:
         print(json.dumps({"token": self.token}, indent=4))  # מדפיס בטור מסודר JSON
         return response
 
-    # --- GET Request Section ---
+    #====================
+    # GET Request Section
+    #====================
 
     @allure.step("API Step: Get Details for Booking ID: {booking_id}")
     def get_booking_details(self, booking_id: int)-> APIResponse: 
@@ -168,7 +172,42 @@ class HotelApiFlows:
         print(json.dumps(data, indent=4))
         return data
 
-    # --- POST Request Section ---
+    #=====================
+    # POST Request Section
+    #=====================
+
+    @allure.step("API: Create mass rooms for performance - Count: {count}")
+    def create_multiple_rooms(self, count: int):
+        for i in range(count):
+            room_data = {
+                "roomName": f"LoadTest{100 + i}",
+                "type": "Double",
+                "accessible": True,
+                "image": "https://example.com/room.jpg",
+                "description": "Mass creation for load test",
+                "features": ["WiFi", "TV"],
+                "roomPrice": 200
+                        }
+            self.execute_room_creation(room_data)
+
+
+    # def execute_room_creation(self, room_data: dict) -> APIResponse:
+    #     data = room_data.copy()
+    #     expected_status = data.pop("expected_status", None)
+    #     test_name = data.pop("test_name", "Unknown Test")
+    #     self._last_expected_status = expected_status
+    #     self._last_test_name = test_name
+    #     token = self.get_valid_token()
+    #     url = f"{BOOKING_BASE_URL}room/"
+    #     headers = {
+    #         "Cookie": f"token={token}",
+    #         "Content-Type": "application/json",
+    #         "accept": "*/*"
+    #     }
+    #     response = self.api.post(url, payload=data, headers=headers)
+    #     print("\nCreating rooms list:")
+    #     print(json.dumps(response.json(), indent=4))
+    #     return response
 
     @allure.step("API Step: Create New Room with Data: {room_data}")
     def execute_room_creation(self, room_data: dict)-> APIResponse:
@@ -201,8 +240,10 @@ class HotelApiFlows:
         except:
             print(response.text())
         return response
-    
-    # --- DELETE Request Section ---
+
+    #=======================
+    # DELETE Request Section 
+    #=======================
 
     @allure.step("API Step: Delete Booking ID: {booking_id}")
     def delete_booking_by_id(self,booking_id:int) -> APIResponse:
@@ -219,7 +260,9 @@ class HotelApiFlows:
         print(f"\nThe extract id is: {extract}")
         return extract
 
-        # --- PUT Request Section ---
+    #====================
+    # PUT Request Section 
+    #====================
 
     @allure.step("API Step: Update Booking ID: {booking_id}")
     def execute_booking_update(self,booking_id:int, payload:dict) -> APIResponse:
@@ -235,8 +278,10 @@ class HotelApiFlows:
         except: 
             print(response.text())
         return response
-    
-        # --- Message Section ---
+
+    #================
+    # Message Section
+    #================
 
     def get_message_count(self) -> APIResponse:
         url = f"{BOOKING_BASE_URL}/message/count"

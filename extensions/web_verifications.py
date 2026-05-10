@@ -1,8 +1,7 @@
-from playwright.sync_api import Locator, expect
-from smart_assertions import soft_assert, verify_expectations
 import allure
-
+from playwright.sync_api import Locator, expect
 from extensions.ui_actions import UIActions
+from smart_assertions import soft_assert, verify_expectations
 
 class WebVerify:
   
@@ -13,13 +12,27 @@ class WebVerify:
         Verifies that the text of the element matches the expected text.
         """
         print(f"\nELement's Actual Text:{UIActions.get_text(element)}")
-        print(f"Expected Text:{expected_text}")
+        print(f"\nExpected Text:{expected_text}")
         expect(element).to_have_text(expected_text)
 
     @staticmethod
     @allure.step("Verify String")
     def strings_are_equal(actual:str,expected:str,message=None):
         assert actual == expected,message
+
+    @staticmethod
+    @allure.step("Verify error message contains expected text")
+    def contains_string(actual: str, expected: str, test_case: str):
+        """
+        בדיקה האם הודעת השגיאה המצופה נמצאת בתוך הטקסט שחזר מהדף.
+        מתאים במיוחד למקרים של DDT עם מספר הודעות שגיאה במקביל.
+        """
+        message = (
+            f"\n[DDT Validation Failed] Case: {test_case}\n"
+            f"Expected to find: '{expected}'\n"
+            f"Actual text seen: '{actual}'"
+        )
+        assert expected in actual, message
 
 
     @staticmethod

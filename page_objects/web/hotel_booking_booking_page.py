@@ -12,5 +12,10 @@ class HotelBooking:
         self.availability_button = page.locator("[class^='btn btn-primary w']")
         self.in_day = page.locator("[aria-label='Choose Sunday, 1 March 2026']") 
         self.rooms_full_card = page.locator("[class='card h-100 shadow-sm room-card']")
-        self.current_month_year = page.locator("[class='react-datepicker__current-month']") # אני צריך לגרום לזה להיות על החודש שאני צריך - נובמבר 2025                                                
-        
+        self.current_month_year = page.locator("[class='react-datepicker__current-month']")
+        self.room_price_per_night = page.locator("//div[contains(., 'per night')]/span[contains(@class, 'fs-2')]")
+        self.total_price = page.locator("//div[contains(., 'Total')]/span[2]")         
+        self.cleaning_fee = page.locator("//div[contains(., 'Cleaning fee')]/span[2]")                                      
+        self.service_fee = page.locator("//div[contains(., 'Service fee')]/span[2]")
+        self.total_nights = page.locator("//div[contains(., 'nights')]/span[1]")
+        self.booking_page_header = page.locator("//h2[normalize-space()='Our Rooms']")
