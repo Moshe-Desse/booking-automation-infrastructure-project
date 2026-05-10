@@ -1,7 +1,0 @@
-{
-    "errors": [
-        "Firstname should not be blank",
-        "must be greater than or equal to 1",
-        "Lastname should not be blank"
-    ]
-}
