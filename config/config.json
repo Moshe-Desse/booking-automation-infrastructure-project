@@ -9,5 +9,4 @@
     "TRACE_PREFIX": "trace",
     "DB_PATH": "data/db/hotels.db",
     "DB_ROOMS_PATH": "data/db/rooms_name.db",
-    "GEMINI_API_KEY": "AIzaSyCS6CO9lMrrZREJN5zbFxuwJUghdVOpQYM"
 }
