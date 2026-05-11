@@ -8,5 +8,5 @@
     "SCREENSHOT_PREFIX": "screenshot",
     "TRACE_PREFIX": "trace",
     "DB_PATH": "data/db/hotels.db",
-    "DB_ROOMS_PATH": "data/db/rooms_name.db",
+    "DB_ROOMS_PATH": "data/db/rooms_name.db"
 }
