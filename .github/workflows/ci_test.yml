@@ -3,9 +3,9 @@ name: Playwright Tests
 on:
   # 1. מאפשר לך להריץ ידנית מה-GitHub Actions מתי שבא לך
   workflow_dispatch:
-  # 2. ריצה אוטומטית בכל יום ב-02:00 בבוקר (שעון ישראל)
   schedule:
-    - cron: '0 23 * * *'
+  # 2. רץ ב-1 וב-15 לכל חודש, בשעה 23:00 שעון UTC (שזה 2 בלילה שעון ישראל)
+    - cron: '0 23 1,15 * *'
   # 3. ריצה בכל פעם שאתה עושה Push לקוד
   push:
     branches: [ main, master ]

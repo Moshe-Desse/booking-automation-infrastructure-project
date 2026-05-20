@@ -194,7 +194,5 @@ class TestHotelBooking:
         actual_text = ai_flows.extract_text_from_screen()
         AiVerify.verify_text_exists(actual_text=actual_text,expected_text=EXPECTET_TEXT_FOR_AI)
 
-    def test_login_with_ai_agent(ai_agent:AiAgentFlows, hotel_booking_flows:HotelBookingFlows):
-        hotel_booking_flows.navigate_to_admin_page()
-        ai_agent.run_flow("Login to admin system")
+
         

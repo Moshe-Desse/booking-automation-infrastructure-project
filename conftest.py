@@ -63,11 +63,9 @@ def mobile_driver():
     yield driver
     driver.quit()
 
-
 @pytest.fixture
 def ai_agent(page, ai_engine):
     return AiAgentFlows(page, ai_engine)
-
 
 @pytest.fixture
 def ai_flows(page, ai_engine):
