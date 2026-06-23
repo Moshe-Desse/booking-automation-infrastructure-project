@@ -52,6 +52,8 @@ The project is built modularly to separate test logic from technical implementat
 - **Allure Reporting:** Detailed visual reports including screenshots and full API request/response logs.
 
 ---
+---
+---
 
 ## 🚀 How to Run
 
