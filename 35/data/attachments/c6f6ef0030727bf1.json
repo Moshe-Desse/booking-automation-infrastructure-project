@@ -1,0 +1,14 @@
+{
+    "accessible": true,
+    "description": "Aenean porttitor mauris sit amet lacinia molestie. In posuere accumsan aliquet. Maecenas sit amet nisl massa. Interdum et malesuada fames ac ante.",
+    "features": [
+        "TV",
+        "WiFi",
+        "Safe"
+    ],
+    "image": "/images/room1.jpg",
+    "roomName": "101",
+    "roomPrice": 100,
+    "roomid": 1,
+    "type": "Single"
+}

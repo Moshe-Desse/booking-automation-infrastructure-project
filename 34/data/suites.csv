@@ -1,2 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"Use AI to scan the screen and make sure the word 'password' appears on the login page.","2927","Test 18 - Visual Verification of Password Field on Login Screen via AI","tests.web","2026-05-11","passed","2026-05-11","TestHotelBooking","test_web_hotel_booking","",""
